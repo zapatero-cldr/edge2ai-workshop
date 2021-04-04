@@ -34,6 +34,32 @@ iot_data = spark.read.schema(schemaData).csv('/user/'
                                              + os.environ['HADOOP_USER_NAME'] 
                                              + '/historical_iot.txt')
 
+# Inspect the Data
+iot_data.show()
+iot_data.printSchema()
+
+#Put Data to Hive Table
+spark.sql("show databases").show()
+spark.sql("show tables in default").show()
+
+# Create the Hive table
+# This is here to create the table in Hive used be the other parts of the project, if it
+# does not already exist.
+
+if ('historical_iot' not in list(spark.sql("show tables in default").toPandas()['tableName'])):
+  print("creating the historical_iot table")
+  iot_data\
+    .write.format("parquet")\
+    .mode("overwrite")\
+    .saveAsTable(
+      'default.historical_iot'
+  )
+
+# Show the data in the hive table
+spark.sql("select * from default.historical_iot").show()
+
+# To get more detailed information about the hive table you can run this:
+spark.sql("describe formatted default.historical_iot").toPandas()
 
 # Create Pipeline
 label_indexer = StringIndexer(inputCol = '12', outputCol = 'label')
