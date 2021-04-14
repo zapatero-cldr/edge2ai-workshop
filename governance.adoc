@@ -13,7 +13,38 @@ In this module we will cover the Governance side of the use case. Some of the co
 
 In this lab you will go back to the NiFi canvas as you will need to configure a controller service for NiFi to report lineage info to Atlas.
 
-=== STEP 1: Configure Reporting Task
+=== STEP 1: Edit Atlas application properties
+. First, ssh into node (as centos, using procedure in workshop web). Then:
+[source]
+----
+#sudo su -
+#vi /etc/atlas/conf.cloudera.atlas/atlas-application.properties
+----
+. Amend the following property to the end of the file:
+[source]
+----
+atlas.notification.hook.asynchronous=false
+----
+Leave all other properties unmodified. The file must look like this:
+[source]
+----
+[root@ec2-3-142-181-122 hook-bin]# cat /etc/atlas/conf.cloudera.atlas/atlas-application.properties
+atlas.kafka.zookeeper.session.timeout.ms=60000
+atlas.kafka.zookeeper.connection.timeout.ms=30000
+atlas.kafka.zookeeper.sync.time.ms=20
+atlas.kafka.bootstrap.servers=ec2-3-142-181-122.us-east-2.compute.amazonaws.com:9092
+atlas.kafka.zookeeper.connect=ec2-3-142-181-122.us-east-2.compute.amazonaws.com:2181/kafka
+atlas.kafka.security.protocol=PLAINTEXT
+atlas.rest.address=http://ec2-3-142-181-122.us-east-2.compute.amazonaws.com:31000
+atlas.metadata.namespace=cm
+keystore.type=jks
+truststore.type=jks
+atlas.kafka.ssl.keystore.type=jks
+atlas.kafka.ssl.truststore.type=jks
+atlas.notification.hook.asynchronous=false
+----
+
+=== STEP 2: Configure Reporting Task
 
 . From the main canvas, on the upper right corner, click the three bars and get to Controller Settings
 
